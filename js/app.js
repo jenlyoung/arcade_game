@@ -47,12 +47,12 @@ Player.prototype.handleInput = function(direction){
     if (direction === 'right'){
         this.x++;
     }
-    // if (direction === 'up'){
-    //     this.x++;
-    // }
-    // if (direction === 'down'){
-    //     this.x++;
-    // }
+    if (direction === 'up'){
+        this.y--;
+    }
+    if (direction === 'down'){
+        this.y++;
+    }
 };
 
 // Now instantiate your objects.
