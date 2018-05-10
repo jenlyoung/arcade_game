@@ -26,13 +26,13 @@ Enemy.prototype.update = function (dt) {
     // all computers.
 };
 
-Enemy.prototype.collision = function(player){
+Enemy.prototype.collision = function (player) {
     if (player.x < this.x + this.w &&
         player.x + player.w > this.x &&
         player.y < this.y + this.h &&
         player.h + player.y > this.y) {
         // collision detected!
-        alert ("collision");
+        // alert ("collision");
     }
 }
 
@@ -55,7 +55,7 @@ var Player = function () {
 };
 
 Player.prototype.update = function () {
-
+    player.checkBoundaries();
 };
 
 
@@ -76,6 +76,23 @@ Player.prototype.handleInput = function (direction) {
     }
     if (direction === 'down') {
         this.y = this.y + 50;
+        console.log(this.y);
+    }
+};
+
+Player.prototype.checkBoundaries = function () {
+    // console.log(this.y, this.x);
+    if (this.y <= 2) {
+        this.y += 5;
+    }
+    if (this.y >= 450) {
+        this.y -= 5;
+    }
+    if (this.x <= -20) {
+        this.x += 5;
+    }
+    if (this.x >= 425) {
+        this.x -= 5;
     }
 };
 
