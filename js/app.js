@@ -16,7 +16,7 @@ var Enemy = function (x, y) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function (dt) {
-    if (this.x < 420) {
+    if (this.x < 500) {
         this.x = this.x + this.speed * dt;
     }
     else this.x = -20;
@@ -26,15 +26,16 @@ Enemy.prototype.update = function (dt) {
     // all computers.
 };
 
-Enemy.prototype.collision = function (player) {
-    if (player.x < this.x + this.w &&
-        player.x + player.w > this.x &&
-        player.y < this.y + this.h &&
-        player.h + player.y > this.y) {
-        // collision detected!
-        // alert ("collision");
-    }
-}
+// Enemy.prototype.collision = function (player) {
+//     if (player.x < this.x + this.w &&
+//         player.x + player.w > this.x &&
+//         player.y < this.y + this.h &&
+//         player.h + player.y > this.y) {
+//         // collision detected!
+//         // alert ("collision");
+//         isCollision = true;
+//     }
+// };
 
 
 // Draw the enemy on the screen, required method for game
@@ -56,6 +57,7 @@ var Player = function () {
 
 Player.prototype.update = function () {
     player.checkBoundaries();
+    player.collision();
 };
 
 
@@ -94,6 +96,24 @@ Player.prototype.checkBoundaries = function () {
     if (this.x >= 425) {
         this.x -= 5;
     }
+};
+
+Player.prototype.collision = function () {
+    // console.log(allEnemies);
+    // var scope = this;
+    allEnemies.forEach(function (enemy) {
+        // console.log("scope", scope);
+        // console.log("this", this);
+        if (this.x < enemy.x + enemy.w &&
+            this.x + this.w > enemy.x &&
+            this.y < enemy.y + enemy.h &&
+            this.h + this.y > enemy.y) {
+            // collision detected!
+            // alert ("collision");
+            this.y = 440;
+            this.x = 200;
+        }
+    }, this);
 };
 
 // Now instantiate your objects.
