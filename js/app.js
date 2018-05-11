@@ -1,3 +1,10 @@
+var Score = function (){
+    this.score = 100;
+}
+
+Score.prototype.updateScore = function(){
+    console.log(this.score);
+}
 // Enemies our player must avoid
 var Enemy = function (x, y) {
     // Variables applied to each of our instances go here,
@@ -47,19 +54,20 @@ Enemy.prototype.render = function () {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Player = function () {
+var Player = function (score) {
     this.sprite = 'images/char-boy.png';
     this.x = 200;
     this.y = 440;
     this.w = 60;
     this.h = 40;
+    this.score = score;
 };
 
 Player.prototype.update = function () {
     player.checkBoundaries();
     player.collision();
+    player.winGame();
 };
-
 
 //
 Player.prototype.render = function () {
@@ -112,8 +120,22 @@ Player.prototype.collision = function () {
             // alert ("collision");
             this.y = 440;
             this.x = 200;
+            this.score.updateScore();
         }
     }, this);
+};
+
+Player.prototype.winGame = function() {
+    if (this.y < 5){
+        console.log("win");
+        updateScore();
+        // winModal.style.display = "flex";
+    }
+};
+
+Player.prototype.startGame = function(){
+    this.x = 200;
+    this.y = 440;
 };
 
 // Now instantiate your objects.
@@ -121,8 +143,8 @@ Player.prototype.collision = function () {
 // Place the player object in a variable called player
 var allEnemies = [new Enemy(100, 225), new Enemy(0, 150), new Enemy(50, 65)];
 
-
-var player = new Player();
+var score = new Score();
+var player = new Player(score);
 
 
 // This listens for key presses and sends the keys to your
@@ -138,6 +160,21 @@ document.addEventListener('keyup', function (e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
+playAgain.on('click', function () {
+    winModal.style.display = "none";
+    player.startGame();
+});
+
+closeButton.on('click', function () {
+    winModal.style.display = "none";
+    // looseModal.style.display = "none";
+    player.startGame();
+});
 
 
+// function updateScore() {
+//     var score = 100;
+//     $(".score").append(score);
+// }
 
+$(".score").append(100);
