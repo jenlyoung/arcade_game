@@ -1,10 +1,22 @@
-var Score = function (){
-    this.score = 100;
-}
 
-Score.prototype.updateScore = function(){
-    console.log(this.score);
-}
+var Score = function (){
+    this.score = 500;
+};
+
+Score.prototype.startScore = function(){
+    $(".score").empty().append(this.score);
+};
+
+Score.prototype.getPoints = function() {
+    this.score += 100;
+};
+
+Score.prototype.loosePoints = function() {
+    this.score -= 100;
+    $(".score").empty().append(this.score);
+};
+
+
 // Enemies our player must avoid
 var Enemy = function (x, y) {
     // Variables applied to each of our instances go here,
@@ -14,8 +26,8 @@ var Enemy = function (x, y) {
     // a helper we've provided to easily load images
     this.x = x;
     this.y = y;
-    this.w = 60;
-    this.h = 40;
+    this.w = 80;
+    this.h = 67;
     this.speed = Math.floor((Math.random() * 200) + 100);
     this.sprite = 'images/enemy-bug.png';
 };
@@ -33,14 +45,22 @@ Enemy.prototype.update = function (dt) {
     // all computers.
 };
 
+function drawBox(x, y, width, height, color) {
+    ctx.beginPath();
+    ctx.rect(x, y, width, height);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = color;
+    ctx.stroke();
+}
+
 // Enemy.prototype.collision = function (player) {
-//     if (player.x < this.x + this.w &&
+//     allEnemies.forEach(function (enemy) {
+//         if (player.x < this.x + this.w &&
 //         player.x + player.w > this.x &&
 //         player.y < this.y + this.h &&
 //         player.h + player.y > this.y) {
 //         // collision detected!
-//         // alert ("collision");
-//         isCollision = true;
+//         alert ("collision");
 //     }
 // };
 
@@ -48,6 +68,7 @@ Enemy.prototype.update = function (dt) {
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    // drawBox(this.x, this.y + 77, 100, 67, "yellow");
 };
 
 
@@ -57,9 +78,9 @@ Enemy.prototype.render = function () {
 var Player = function (score) {
     this.sprite = 'images/char-boy.png';
     this.x = 200;
-    this.y = 440;
-    this.w = 60;
-    this.h = 40;
+    this.y = 400;
+    this.w = 65;
+    this.h = 75;
     this.score = score;
 };
 
@@ -72,37 +93,36 @@ Player.prototype.update = function () {
 //
 Player.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    // drawBox(this.x + 18, this.y + 60, 65, 75
+    //     , "yellow");
 };
 
 Player.prototype.handleInput = function (direction) {
+    var squareSize = 85;
     if (direction === 'left') {
-        this.x = this.x - 50;
+        this.x = this.x - squareSize;
     }
     if (direction === 'right') {
-        this.x = this.x + 50;
+        this.x = this.x + squareSize;
     }
     if (direction === 'up') {
-        this.y = this.y - 50;
+        this.y = this.y - squareSize;
     }
     if (direction === 'down') {
-        this.y = this.y + 50;
+        this.y = this.y + squareSize;
         console.log(this.y);
     }
 };
 
 Player.prototype.checkBoundaries = function () {
-    // console.log(this.y, this.x);
-    if (this.y <= 2) {
-        this.y += 5;
+    if (this.y >= 400) {
+        this.y = 400;
     }
-    if (this.y >= 450) {
-        this.y -= 5;
+    if (this.x <= 0) {
+        this.x = 0;
     }
-    if (this.x <= -20) {
-        this.x += 5;
-    }
-    if (this.x >= 425) {
-        this.x -= 5;
+    if (this.x >= 400) {
+        this.x = 400;
     }
 };
 
@@ -116,32 +136,45 @@ Player.prototype.collision = function () {
             this.x + this.w > enemy.x &&
             this.y < enemy.y + enemy.h &&
             this.h + this.y > enemy.y) {
-            // collision detected!
-            // alert ("collision");
-            this.y = 440;
-            this.x = 200;
-            this.score.updateScore();
+            // enemy.speed = 0;
+            this.startPosition();
+            // this.score.updateScore();
+            score.loosePoints();
         }
     }, this);
 };
 
+// Enemy.prototype.collision = function (player) {
+//     allEnemies.forEach(function (enemy) {
+//         if (player.x < enemy.x + enemy.w &&
+//             player.x + player.w > enemy.x &&
+//             player.y < enemy.y + enemy.h &&
+//             player.h + player.y > enemy.y) {
+//             // collision detected!
+//             alert ("collision");
+//         }
+//     });
+// };
+
+Player.prototype.startPosition = function() {
+    this.x = 200;
+    this.y = 400;
+    score.startScore();
+};
+
 Player.prototype.winGame = function() {
-    if (this.y < 5){
-        console.log("win");
-        updateScore();
-        // winModal.style.display = "flex";
+    if (this.y < 50){
+        score.getPoints();
+        player.startPosition();
     }
 };
 
-Player.prototype.startGame = function(){
-    this.x = 200;
-    this.y = 440;
-};
+
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var allEnemies = [new Enemy(100, 225), new Enemy(0, 150), new Enemy(50, 65)];
+var allEnemies = [new Enemy(100, 220), new Enemy(0, 140), new Enemy(50, 58)];
 
 var score = new Score();
 var player = new Player(score);
@@ -160,10 +193,10 @@ document.addEventListener('keyup', function (e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
-playAgain.on('click', function () {
-    winModal.style.display = "none";
-    player.startGame();
-});
+// playAgain.on('click', function () {
+//     winModal.style.display = "none";
+//     player.startGame();
+// });
 
 closeButton.on('click', function () {
     winModal.style.display = "none";
@@ -172,9 +205,4 @@ closeButton.on('click', function () {
 });
 
 
-// function updateScore() {
-//     var score = 100;
-//     $(".score").append(score);
-// }
 
-$(".score").append(100);
