@@ -7,15 +7,42 @@ Score.prototype.startScore = function(){
     $(".score").empty().append(this.score);
 };
 
-Score.prototype.getPoints = function() {
+Score.prototype.earnPoints = function() {
     this.score += 100;
+
+    // if (this.score > 1000){
+    //     this.score = 1000;
+    // }
 };
 
 Score.prototype.loosePoints = function() {
     this.score -= 100;
-    $(".score").empty().append(this.score);
+    // if (this.score < 0){
+    //     this.score = 0;
+    // }
 };
 
+Score.prototype.win = function() {
+    if (this.score === 600) {
+        $(".modal-title").empty().append("Congratulations!");
+        $(".modal-body").empty().append("<p>You Win!</p>");
+        $("#myModal").modal("show");
+        this.reset();
+    }
+};
+
+Score.prototype.loose = function() {
+    if (this.score === 400){
+        $(".modal-title").empty().append("Sorry!");
+        $(".modal-body").empty().append("<p>You Loose!</p>");
+        $("#myModal").modal("show");
+        this.reset();
+    }
+};
+
+Score.prototype.reset = function() {
+    this.score = 500;
+}
 
 // Enemies our player must avoid
 var Enemy = function (x, y) {
@@ -98,18 +125,19 @@ Player.prototype.render = function () {
 };
 
 Player.prototype.handleInput = function (direction) {
-    var squareSize = 85;
+    var verticalSize = 85;
+    var horizontalSize = 100;
     if (direction === 'left') {
-        this.x = this.x - squareSize;
+        this.x = this.x - horizontalSize;
     }
     if (direction === 'right') {
-        this.x = this.x + squareSize;
+        this.x = this.x + horizontalSize;
     }
     if (direction === 'up') {
-        this.y = this.y - squareSize;
+        this.y = this.y - verticalSize;
     }
     if (direction === 'down') {
-        this.y = this.y + squareSize;
+        this.y = this.y + verticalSize;
         console.log(this.y);
     }
 };
@@ -139,7 +167,8 @@ Player.prototype.collision = function () {
             // enemy.speed = 0;
             this.startPosition();
             // this.score.updateScore();
-            score.loosePoints();
+            this.score.loosePoints();
+            this.score.loose();
         }
     }, this);
 };
@@ -159,17 +188,28 @@ Player.prototype.collision = function () {
 Player.prototype.startPosition = function() {
     this.x = 200;
     this.y = 400;
-    score.startScore();
+    this.score.startScore();
 };
 
 Player.prototype.winGame = function() {
     if (this.y < 50){
-        score.getPoints();
-        player.startPosition();
+        this.score.earnPoints();
+        this.startPosition();
+        this.score.win();
     }
 };
 
-
+//
+// var Modal = function (score){
+//     this.winMessage = "Congratulations! You won!",
+//     this.looseMessage = "You Loose!",
+//     this.placeMessage = function () {
+//         if (this.score === 600){
+//             $(".modal-title").append(this.winMessage());
+//         }
+//     }
+//
+// };
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -178,6 +218,7 @@ var allEnemies = [new Enemy(100, 220), new Enemy(0, 140), new Enemy(50, 58)];
 
 var score = new Score();
 var player = new Player(score);
+// var modal = new Modal(score);
 
 
 // This listens for key presses and sends the keys to your
@@ -192,17 +233,5 @@ document.addEventListener('keyup', function (e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
-
-// playAgain.on('click', function () {
-//     winModal.style.display = "none";
-//     player.startGame();
-// });
-
-closeButton.on('click', function () {
-    winModal.style.display = "none";
-    // looseModal.style.display = "none";
-    player.startGame();
-});
-
 
 

@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <title>Effective JavaScript: Frogger</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="scoreboard">
@@ -14,14 +16,45 @@
 <script src="js/app.js"></script>
 <script src="js/engine.js"></script>
 
-<div id="winModal" class="modal">
-    <div class="modal-content">
-        <div class="close">
-            <span class="close-button">&times;</span>
+<div class="container">
+    <h2>Modal Example</h2>
+    <!-- Trigger the modal with a button -->
+    <!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>-->
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <!--<p>Some text in the modal.</p>-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Play Again</button>
+                </div>
+            </div>
+
         </div>
-        <h1 class="modal-title">Congratulations! You Won!</h1>
-        <button class="play-again">Play Again!</button>
     </div>
+
 </div>
+
+
 </body>
 </html>
+
+
+<!--<div class="modal">-->
+    <!--<div class="modal-content">-->
+        <!--<div class="close">-->
+            <!--<span class="close-button">&times;</span>-->
+        <!--</div>-->
+        <!--<h1 class="modal-message"></h1>-->
+        <!--<button class="play-again">Play Again!</button>-->
+    <!--</div>-->
+<!--</div>-->

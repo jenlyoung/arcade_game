@@ -64,7 +64,7 @@ body {
 }
 
 /*Modal Message*/
-.modal-title {
+.modal-message {
     display: flex;
     justify-content: center;
     width: 100%;
