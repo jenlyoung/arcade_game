@@ -11,18 +11,19 @@ Score.prototype.displayScore = function () {
     $(".score").empty().append(this.score);
 };
 
-//increases the score by 100 when sprite reaches water
+//increases the score by 100 when sprite reaches water and displays score
 Score.prototype.earnPoints = function () {
     this.score += 100;
+    this.displayScore();
 };
 
-// decreases the points by 100 when sprite get hits by bug
+// decreases the points by 100 when sprite get hits by bug and displays score
 Score.prototype.loosePoints = function () {
     this.score -= 100;
-
+    this.displayScore();
 };
 
-//resets the score to 500
+//resets the score to 500 and displays score
 Score.prototype.reset = function () {
     this.score = 500;
     this.displayScore();
@@ -30,13 +31,14 @@ Score.prototype.reset = function () {
 
 // win modal pops up when the score is 1000
 Score.prototype.win = function () {
-    if (this.score === 700) {
+    if (this.score === 1000) {
         console.log("win", this);
         $(".modal-title").empty().append("Congratulations!");
         $(".modal-body").empty().append("<p>You Win!</p>");
         $("#myModal").modal("show");
 
-        var scope = this;
+        //resets the score when the play again button is hit
+        var scope = this; //makes the scope score
         $("#play-again").on('click', function () {
             console.log("button", this);
             scope.reset();
@@ -46,13 +48,14 @@ Score.prototype.win = function () {
 
 //loose modal pops up when score reaches 0
 Score.prototype.loose = function () {
-    if (this.score === 300) {
+    if (this.score === 0) {
         console.log("loose:", this);
         $(".modal-title").empty().append("Sorry!");
         $(".modal-body").empty().append("<p>You Loose!</p>");
         $("#myModal").modal("show");
 
-        var scope = this;
+        //resets score when play again button is hit
+        var scope = this;//makes the scope score
         $("#play-again").on('click', function () {
             scope.reset();
         });
@@ -62,19 +65,13 @@ Score.prototype.loose = function () {
 //Enemy Object
 
 // Enemies our player must avoid
-var Enemy = function (x, y, score) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
+var Enemy = function (x, y) {
     this.x = x;
     this.y = y;
     this.w = 80;
     this.h = 67;
-    this.speed = Math.floor((Math.random() * 200) + 100);
+    this.speed = Math.floor((Math.random() * 250) + 100);
     this.sprite = 'images/enemy-bug.png';
-    this.score = score;
 };
 
 // Update the enemy's position, required method for game
@@ -92,29 +89,20 @@ Enemy.prototype.render = function () {
     // drawBox(this.x, this.y + 77, 100, 67, "yellow");
 };
 
-Enemy.prototype.stopBugs = function () {
-    this.speed = 0;
-};
-
 //Player Class
-
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-var Player = function (score, enemies) {
+var Player = function (score) {
     this.sprite = 'images/char-boy.png';
     this.x = 200;
     this.y = 400;
     this.w = 65;
     this.h = 75;
     this.score = score;
-    this.enemies = enemies;
 };
 
 Player.prototype.update = function () {
     player.collision();
     player.checkBoundaries();
-    player.hitWater();
+    player.reachWater();
 };
 
 //
@@ -124,6 +112,7 @@ Player.prototype.render = function () {
     //     , "yellow");
 };
 
+//determines how big a jump the player will make
 Player.prototype.handleInput = function (direction) {
     var verticalSize = 85;
     var horizontalSize = 100;
@@ -138,7 +127,6 @@ Player.prototype.handleInput = function (direction) {
     }
     if (direction === 'down') {
         this.y = this.y + verticalSize;
-        // console.log(this.y);
     }
 };
 
@@ -157,27 +145,22 @@ Player.prototype.checkBoundaries = function () {
 
 //checks for collisions
 Player.prototype.collision = function () {
-    // console.log(allEnemies);
-    // var scope = this;
     allEnemies.forEach(function (enemy) {
-        // console.log("scope", scope);
-        // console.log("this", this);
         if (this.x < enemy.x + enemy.w &&
             this.x + this.w > enemy.x &&
             this.y < enemy.y + enemy.h &&
             this.h + this.y > enemy.y) {
             // subtract points when hit and display score
             this.score.loosePoints();
-            this.score.displayScore();
 
             //sprite goes to start position
             this.startPosition();
 
-            // points = 0, loose game modal
+            // if points = 0, loose game modal
             this.score.loose();
-
-            // bugs stop moving
-            this.looseGame();
+            //
+            // // bugs stop moving
+            // this.looseGame();
         }
     }, this);
 };
@@ -188,46 +171,19 @@ Player.prototype.startPosition = function () {
     this.y = 400;
 };
 
-Player.prototype.hitWater = function () {
+// when player reaches the water
+Player.prototype.reachWater = function () {
     if (this.y < 50) {
         this.score.earnPoints();
-        this.score.displayScore();
-
         this.startPosition();
-        // this.score.win();
-        this.winGame();
+        this.score.win();
     }
 };
 
-Player.prototype.winGame = function () {
-    this.score.win();
-    // this.enemy.speed = 0;
-    // this.enemies.forEach(function (enemy) {
-    //     enemy.stopBugs();
-    // });
-};
-
-Player.prototype.looseGame = function () {
-    this.score.loose();
-    // this.enemy.speed = 0;
-    // this.enemies.forEach(function (enemy) {
-    //     enemy.stopBugs();
-    // });
-};
-
-// Player.prototype.stopBugs = function () {
-//     this.enemy.speed = 0;
-// };
-
-
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-var allEnemies = ([new Enemy(100, 220), new Enemy(0, 140), new Enemy(50, 58)]);
-
+//Instatiates objects
+var allEnemies = ([new Enemy(0, 220), new Enemy(0, 140), new Enemy(0, 58), new Enemy(200, 58)]);
 var score = new Score();
 var player = new Player(score, allEnemies);
-// var modal = new Modal(score);
 
 
 // This listens for key presses and sends the keys to your
@@ -259,14 +215,14 @@ document.addEventListener('keyup', function (e) {
 //         alert ("collision");
 //     }
 // };
-
-function drawBox(x, y, width, height, color) {
-    ctx.beginPath();
-    ctx.rect(x, y, width, height);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = color;
-    ctx.stroke();
-}
+//
+// function drawBox(x, y, width, height, color) {
+//     ctx.beginPath();
+//     ctx.rect(x, y, width, height);
+//     ctx.lineWidth = 2;
+//     ctx.strokeStyle = color;
+//     ctx.stroke();
+// }
 
 // Enemy.prototype.collision = function (player) {
 //     allEnemies.forEach(function (enemy) {
@@ -280,3 +236,18 @@ function drawBox(x, y, width, height, color) {
 //     });
 // };
 
+// Player.prototype.winGame = function () {
+//     this.score.win();
+// };
+//
+// Player.prototype.looseGame = function () {
+//     this.score.loose();
+//     // this.enemy.speed = 0;
+//     // this.enemies.forEach(function (enemy) {
+//     //     enemy.stopBugs();
+//     // });
+// };
+
+// Player.prototype.stopBugs = function () {
+//     this.enemy.speed = 0;
+// };
