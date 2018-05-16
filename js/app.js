@@ -14,12 +14,14 @@ Score.prototype.displayScore = function () {
 //increases the score by 100 when sprite reaches water and displays score
 Score.prototype.earnPoints = function () {
     this.score += 100;
+    this.scoreFreeze();
     this.displayScore();
 };
 
 // decreases the points by 100 when sprite get hits by bug and displays score
 Score.prototype.loosePoints = function () {
     this.score -= 100;
+    this.scoreFreeze();
     this.displayScore();
 };
 
@@ -54,14 +56,22 @@ Score.prototype.loose = function () {
         $(".modal-body").empty().append("<p>You Loose!</p>");
         $("#myModal").modal("show");
 
-        //resets score when play again button is hit
-        var scope = this;//makes the scope score
-        $("#play-again").on('click', function () {
-            scope.reset();
-        });
+        // //resets score when play again button is hit
+        // var scope = this;//makes the scope score
+        // $("#play-again").on('click', function () {
+        //     scope.reset();
+        // });
     }
 };
 
+Score.prototype.scoreFreeze = function () {
+    if (this.score >= 1000){
+        this.score = 1000;
+    }
+    if (this.score <= 0){
+        this.score = 0;
+    }
+};
 //Enemy Object
 
 // Enemies our player must avoid
@@ -100,9 +110,9 @@ var Player = function (score) {
 };
 
 Player.prototype.update = function () {
-    player.collision();
-    player.checkBoundaries();
-    player.reachWater();
+    this.collision();
+    this.checkBoundaries();
+    this.reachWater();
 };
 
 //
@@ -181,6 +191,7 @@ Player.prototype.reachWater = function () {
     }
 };
 
+
 //Instatiates objects
 var allEnemies = ([new Enemy(0, 220), new Enemy(0, 140), new Enemy(0, 58), new Enemy(200, 58)]);
 var score = new Score();
@@ -199,6 +210,11 @@ document.addEventListener('keyup', function (e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+$("#play-again").on('click', function (score, player) {
+        score.reset();
+        player.startPosition()
+    });
 
 
 //
