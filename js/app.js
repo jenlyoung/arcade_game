@@ -157,10 +157,10 @@ Player.prototype.collision = function () {
             this.startPosition();
 
             // if points = 0, loose game modal
-            this.score.loose();
+            // this.score.loose();
             //
             // // bugs stop moving
-            // this.looseGame();
+            this.looseGame();
         }
     }, this);
 };
@@ -176,7 +176,8 @@ Player.prototype.reachWater = function () {
     if (this.y < 50) {
         this.score.earnPoints();
         this.startPosition();
-        this.score.win();
+        // this.score.win();
+        this.winGame();
     }
 };
 
@@ -236,17 +237,15 @@ document.addEventListener('keyup', function (e) {
 //     });
 // };
 
-// Player.prototype.winGame = function () {
-//     this.score.win();
-// };
+Player.prototype.winGame = function () {
+    this.score.win();
+    player.startPosition();
+};
 //
-// Player.prototype.looseGame = function () {
-//     this.score.loose();
-//     // this.enemy.speed = 0;
-//     // this.enemies.forEach(function (enemy) {
-//     //     enemy.stopBugs();
-//     // });
-// };
+Player.prototype.looseGame = function () {
+    this.score.loose();
+    player.startPosition();
+};
 
 // Player.prototype.stopBugs = function () {
 //     this.enemy.speed = 0;
