@@ -20,7 +20,7 @@ The bugs have invaded!  Escape the bug invasion by making it to the water withou
 
 ## How to Run the Game
 
-To run the game, click [here](http://jenlyoung.github.io/arcade_game/).
+To run the game, click [here](https://jenlyoung.github.io/arcade_game/).
 
 ## Contributing
 
