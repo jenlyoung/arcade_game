@@ -3,6 +3,7 @@
 // sets initial score to 500
 var Score = function () {
     this.score = 500;
+    this.gameOver = false;
 };
 
 //appends score to html when game starts/restart
@@ -29,11 +30,13 @@ Score.prototype.loosePoints = function () {
 Score.prototype.reset = function () {
     this.score = 500;
     this.displayScore();
+    this.gameOver = false;
 };
 
 // win modal pops up when the score is 1000
 Score.prototype.win = function () {
     if (this.score === 1000) {
+        this.gameOver = true;
         console.log("win", this);
         $(".modal-title").empty().append("Congratulations!");
         $(".modal-body").empty().append("<p>You Win!</p>");
@@ -52,15 +55,16 @@ Score.prototype.win = function () {
 Score.prototype.loose = function () {
     if (this.score === 0) {
         console.log("loose:", this);
+        this.gameOver = true;
         $(".modal-title").empty().append("Sorry!");
         $(".modal-body").empty().append("<p>You Loose!</p>");
         $("#myModal").modal("show");
 
-        // //resets score when play again button is hit
-        // var scope = this;//makes the scope score
-        // $("#play-again").on('click', function () {
-        //     scope.reset();
-        // });
+        //resets score when play again button is hit
+        var scope = this;//makes the scope score
+        $("#play-again").on('click', function () {
+            scope.reset();
+        });
     }
 };
 
@@ -126,6 +130,9 @@ Player.prototype.render = function () {
 Player.prototype.handleInput = function (direction) {
     var verticalSize = 85;
     var horizontalSize = 100;
+    if (this.score.gameOver){
+        return;
+    }
     if (direction === 'left') {
         this.x = this.x - horizontalSize;
     }
@@ -171,6 +178,8 @@ Player.prototype.collision = function () {
             //
             // // bugs stop moving
             this.looseGame();
+
+
         }
     }, this);
 };
@@ -188,6 +197,22 @@ Player.prototype.reachWater = function () {
         this.startPosition();
         // this.score.win();
         this.winGame();
+    }
+};
+
+
+Player.prototype.winGame = function () {
+    this.score.win();
+
+    if (this.score.playAgain) {
+        this.startPosition();
+    }
+};
+//
+Player.prototype.looseGame = function () {
+    this.score.loose();
+    if (this.score.playAgain = true) {
+        this.startPosition();
     }
 };
 
@@ -211,10 +236,10 @@ document.addEventListener('keyup', function (e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
-$("#play-again").on('click', function (score, player) {
-        score.reset();
-        player.startPosition()
-    });
+// $("#play-again").on('click', function (score, player) {
+//         score.reset();
+//         player.startPosition();
+// });
 
 
 //
@@ -253,15 +278,6 @@ $("#play-again").on('click', function (score, player) {
 //     });
 // };
 
-Player.prototype.winGame = function () {
-    this.score.win();
-    player.startPosition();
-};
-//
-Player.prototype.looseGame = function () {
-    this.score.loose();
-    player.startPosition();
-};
 
 // Player.prototype.stopBugs = function () {
 //     this.enemy.speed = 0;
