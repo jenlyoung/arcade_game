@@ -1,4 +1,7 @@
-//Score Object
+/**
+ * @description scoreboard
+ * @ constructor
+ */
 
 // sets initial score to 500
 var Score = function () {
@@ -37,7 +40,6 @@ Score.prototype.reset = function () {
 Score.prototype.win = function () {
     if (this.score === 1000) {
         this.gameOver = true;
-        console.log("win", this);
         $(".modal-title").empty().append("Congratulations!");
         $(".modal-body").empty().append("<p>You Win!</p>");
         $("#myModal").modal("show");
@@ -54,7 +56,6 @@ Score.prototype.win = function () {
 //loose modal pops up when score reaches 0
 Score.prototype.loose = function () {
     if (this.score === 0) {
-        console.log("loose:", this);
         this.gameOver = true;
         $(".modal-title").empty().append("Sorry!");
         $(".modal-body").empty().append("<p>You Loose!</p>");
@@ -69,16 +70,19 @@ Score.prototype.loose = function () {
 };
 
 Score.prototype.scoreFreeze = function () {
-    if (this.score >= 1000){
+    if (this.score >= 1000) {
         this.score = 1000;
     }
-    if (this.score <= 0){
+    if (this.score <= 0) {
         this.score = 0;
     }
 };
 
-//Enemy Object
-// Enemies our player must avoid
+/**
+ * @description enemy object
+ * @ constructor
+ */
+
 var Enemy = function (x, y) {
     this.x = x;
     this.y = y;
@@ -93,8 +97,9 @@ var Enemy = function (x, y) {
 Enemy.prototype.update = function (dt) {
     if (this.x < 500) {
         this.x = this.x + this.speed * dt;
+    } else {
+        this.x = -20;
     }
-    else this.x = -20;
 };
 
 // Draw the enemy on the screen, required method for game
@@ -102,7 +107,11 @@ Enemy.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-//Player Class
+/**
+ * @description Player Object
+ * @ constructor
+ */
+
 var Player = function (score) {
     this.sprite = 'images/char-boy.png';
     this.x = 200;
@@ -125,9 +134,10 @@ Player.prototype.render = function () {
 
 //determines how big a jump the player will make
 Player.prototype.handleInput = function (direction) {
-    var verticalSize = 85;
-    var horizontalSize = 100;
-    if (this.score.gameOver){
+    var verticalSize = 85,
+        horizontalSize = 100;
+
+    if (this.score.gameOver) {
         return;
     }
     if (direction === 'left') {
@@ -160,10 +170,12 @@ Player.prototype.checkBoundaries = function () {
 //checks for collisions
 Player.prototype.collision = function () {
     allEnemies.forEach(function (enemy) {
-        if (this.x < enemy.x + enemy.w &&
+        if (
+            this.x < enemy.x + enemy.w &&
             this.x + this.w > enemy.x &&
             this.y < enemy.y + enemy.h &&
-            this.h + this.y > enemy.y) {
+            this.h + this.y > enemy.y
+        ) {
             // subtract points when hit and display score
             this.score.loosePoints();
 
@@ -191,19 +203,14 @@ Player.prototype.reachWater = function () {
     }
 };
 
+// when player reaches 1000 points, player wins
 Player.prototype.winGame = function () {
     this.score.win();
-
-    if (this.score.playAgain) {
-        this.startPosition();
-    }
 };
-//
+
+// when player's score is 0, player looses
 Player.prototype.looseGame = function () {
     this.score.loose();
-    if (this.score.playAgain = true) {
-        this.startPosition();
-    }
 };
 
 

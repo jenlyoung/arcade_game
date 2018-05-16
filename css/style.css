@@ -2,8 +2,10 @@ body {
     text-align: center;
 }
 
+/*Title and Score*/
+
 .font {
-    font-family: "Courier New";
+    font-family: "Courier New", Arial, sans-serif;
     font-weight: bold;
 }
 
@@ -11,6 +13,10 @@ body {
     margin: auto;
     width: 500px;
     padding: 0;
+}
+
+.header {
+    margin-bottom: -50px;
 }
 
 .title {
@@ -25,6 +31,3 @@ body {
     justify-content: center;
 }
 
-.header {
-    margin-bottom: -50px;
-}
