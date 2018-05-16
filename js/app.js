@@ -76,8 +76,8 @@ Score.prototype.scoreFreeze = function () {
         this.score = 0;
     }
 };
-//Enemy Object
 
+//Enemy Object
 // Enemies our player must avoid
 var Enemy = function (x, y) {
     this.x = x;
@@ -100,7 +100,6 @@ Enemy.prototype.update = function (dt) {
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    // drawBox(this.x, this.y + 77, 100, 67, "yellow");
 };
 
 //Player Class
@@ -122,8 +121,6 @@ Player.prototype.update = function () {
 //
 Player.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    // drawBox(this.x + 18, this.y + 60, 65, 75
-    //     , "yellow");
 };
 
 //determines how big a jump the player will make
@@ -173,18 +170,13 @@ Player.prototype.collision = function () {
             //sprite goes to start position
             this.startPosition();
 
-            // if points = 0, loose game modal
-            // this.score.loose();
-            //
-            // // bugs stop moving
+            // if score = 0, loose modal pops up
             this.looseGame();
-
-
         }
     }, this);
 };
 
-// //sets starting position for player
+//sets starting position for player
 Player.prototype.startPosition = function () {
     this.x = 200;
     this.y = 400;
@@ -195,11 +187,9 @@ Player.prototype.reachWater = function () {
     if (this.y < 50) {
         this.score.earnPoints();
         this.startPosition();
-        // this.score.win();
         this.winGame();
     }
 };
-
 
 Player.prototype.winGame = function () {
     this.score.win();
@@ -217,7 +207,7 @@ Player.prototype.looseGame = function () {
 };
 
 
-//Instatiates objects
+//Instantiates objects
 var allEnemies = ([new Enemy(0, 220), new Enemy(0, 140), new Enemy(0, 58), new Enemy(200, 58)]);
 var score = new Score();
 var player = new Player(score, allEnemies);
@@ -236,49 +226,4 @@ document.addEventListener('keyup', function (e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
-// $("#play-again").on('click', function (score, player) {
-//         score.reset();
-//         player.startPosition();
-// });
 
-
-//
-
-
-//extras
-
-// Enemy.prototype.collision = function (player) {
-//     allEnemies.forEach(function (enemy) {
-//         if (player.x < this.x + this.w &&
-//         player.x + player.w > this.x &&
-//         player.y < this.y + this.h &&
-//         player.h + player.y > this.y) {
-//         // collision detected!
-//         alert ("collision");
-//     }
-// };
-//
-// function drawBox(x, y, width, height, color) {
-//     ctx.beginPath();
-//     ctx.rect(x, y, width, height);
-//     ctx.lineWidth = 2;
-//     ctx.strokeStyle = color;
-//     ctx.stroke();
-// }
-
-// Enemy.prototype.collision = function (player) {
-//     allEnemies.forEach(function (enemy) {
-//         if (player.x < enemy.x + enemy.w &&
-//             player.x + player.w > enemy.x &&
-//             player.y < enemy.y + enemy.h &&
-//             player.h + player.y > enemy.y) {
-//             // collision detected!
-//             alert ("collision");
-//         }
-//     });
-// };
-
-
-// Player.prototype.stopBugs = function () {
-//     this.enemy.speed = 0;
-// };
