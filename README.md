@@ -1,6 +1,30 @@
-frontend-nanodegree-arcade-game
-===============================
+# Arcade Game Project--Bug Invasion
 
-Students should use this [rubric](https://review.udacity.com/#!/projects/2696458597/rubric) for self-checking their submission. Make sure the functions you write are **object-oriented** - either class functions (like Player and Enemy) or class prototype functions such as Enemy.prototype.checkCollisions, and that the keyword 'this' is used appropriately within your class and class prototype functions to refer to the object the function is called upon. Also be sure that the **readme.md** file is updated with your instructions on both how to 1. Run and 2. Play your arcade game.
+Welcome to my arcade game! This game was designed as part of Udacity's Front-End Web Developer Nanodegree. Enjoy!
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
+## Objective
+
+The bugs have invaded!  Escape the bug invasion by making it to the water without colliding into the bugs! 
+
+## How to Play
+
+* At the start of the game, your player will have 500 points.
+* Move your player up, down, right and left to avoid the bugs. 
+* If you collide with a bug, you loose 100 points.
+* If you make it to the water without colliding with a bug, you earn 100 points.
+
+## How to Win
+
+* If you player earns 1,000 points, you win!
+* Be careful, if your score goes down to 0, you loose!
+
+## How to Run the Game
+
+To run the game, click [here](http://jenlyoung.github.io/Memory-Game/).
+
+## Contributing
+
+In addition to some JavaScript provided by Udacity, the following sources were helpful in writing this program:
+
+### Modal
+[Boostrap](https://getbootstrap.com/docs/4.0/components/modal/)
